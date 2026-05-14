@@ -2,6 +2,8 @@
 	 * Classe astratta che rappresenta un attributo generico del dataset.
 	 * Ogni attributo ha un nome e un indice (posizione nella matrice).
 	 */
+
+	package data;
 	
 	public abstract class Attribute {
     	protected String name; 

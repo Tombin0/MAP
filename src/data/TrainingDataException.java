@@ -2,6 +2,7 @@
  * del Training Set (es. file inesistente, formato errato, ecc.)
  */
 
+package data;
 
 public class TrainingDataException extends Exception {
 
@@ -14,3 +15,4 @@ public class TrainingDataException extends Exception {
     public TrainingDataException(String message) {
         super(message);
     }
+}
