@@ -1,18 +1,19 @@
 package tree;
+
 import data.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public abstract class SplitNode extends Node implements Comparable<SplitNode> {
+public abstract class SplitNode extends Node implements Comparable<SplitNode>, java.io.Serializable {
 
-    public class SplitInfo {
+    // Aggiunto implements java.io.Serializable per permettere il salvataggio su file
+    public class SplitInfo implements java.io.Serializable {
         public Object splitValue;
         public int beginIndex;
         public int endIndex;
         public int numberChild;
         public String comparator = "=";
 
-        // Costruisce informazioni di split senza comparatore esplicito.
         // Costruisce informazioni di split senza comparatore esplicito.
         public SplitInfo(Object splitValue, int beginIndex, int endIndex, int numberChild) {
             this.splitValue = splitValue;
@@ -47,7 +48,7 @@ public abstract class SplitNode extends Node implements Comparable<SplitNode> {
 
         // Restituisce la descrizione del ramo di split.
         public String toString() {
-            return "child " + numberChild + " split value" + comparator + splitValue + "[Examples:" + beginIndex + "-" + endIndex + "]";
+            return "child " + numberChild + " split value " + comparator + splitValue + " [Examples:" + beginIndex + "-" + endIndex + "]";
         }
 
         // Restituisce il comparatore usato nello split.
@@ -57,8 +58,6 @@ public abstract class SplitNode extends Node implements Comparable<SplitNode> {
     }
 
     Attribute attribute;
-    
-    // Sostituito l'array statico con List ed ArrayList
     List<SplitInfo> mapSplit;
     double splitVariance;
 
@@ -133,8 +132,7 @@ public abstract class SplitNode extends Node implements Comparable<SplitNode> {
         return v;
     }
 
-    /*  Confronta due split node in base alla varianza dello split. */
-
+    /* Confronta due split node in base alla varianza dello split. */
     @Override
     public int compareTo(SplitNode o) {
         if (this.splitVariance < o.splitVariance) {
