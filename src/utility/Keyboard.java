@@ -42,16 +42,14 @@ public class Keyboard {
 	}
 
 	// -----------------------------------------------------------------
-	// Sets a boolean indicating whether input errors are to be
-	// printed to standard output.
+	// Sets whether input errors should be printed to standard output.
 	// -----------------------------------------------------------------
 	public static void setPrintErrors(boolean flag) {
 		printErrors = flag;
 	}
 
 	// -----------------------------------------------------------------
-	// Increments the error count and prints the error message if
-	// appropriate.
+	// Registra un errore di input e lo stampa se abilitato.
 	// -----------------------------------------------------------------
 	private static void error(String str) {
 		errorCount++;
@@ -126,8 +124,6 @@ public class Keyboard {
 	public static boolean endOfLine() {
 		return !reader.hasMoreTokens();
 	}
-
-	// ************* Reading Section *********************************
 
 	// -----------------------------------------------------------------
 	// Returns a string read from standard input.

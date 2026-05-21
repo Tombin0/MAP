@@ -3,7 +3,6 @@
 */
 
 package tree;
-import data.*;
 
 public class UnknownValueException extends Exception {
     public UnknownValueException(String message) {

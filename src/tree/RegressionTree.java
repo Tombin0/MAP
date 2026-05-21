@@ -46,7 +46,6 @@ public class RegressionTree {
         System.out.println("********* RULES **********");
         printRules("");
     }
-    // La funzione printRules è stata modificata per essere ricorsiva modo da costruire le regole in modo più chiaro e leggibile.
     private void printRules(String current) {
         if (root instanceof LeafNode) {
             System.out.println(current + " ==> Class=" + ((LeafNode) root).getPredictedClassValue());
@@ -61,8 +60,6 @@ public class RegressionTree {
                 }
             }
     }
-    
-    // La classe SplitInfo rappresenta le informazioni di split per un nodo di split.
     
     public void learnTree(Data trainingSet, int begin, int end, int numberOfExamplesPerLeaf) {
         if (isLeaf(trainingSet, begin, end, numberOfExamplesPerLeaf)) {
@@ -107,10 +104,6 @@ public class RegressionTree {
 			}
 		return tree;
 	}
-    //la funzione predictClass è utilizzata per prevedere la classe di un esempio. 
-    // Se il nodo è una foglia, restituisce il valore previsto. Altrimenti, formula la query e chiede all'utente di inserire la risposta, 
-    // quindi procede ricorsivamente nel ramo corrispondente.
-
     public Double predictClass() throws UnknownValueException {
         if (root instanceof LeafNode) {
             return ((LeafNode) root).getPredictedClassValue();

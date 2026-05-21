@@ -8,7 +8,7 @@ class MainTest {
 
     public static void main(String[] args) {
         
-        // 1. Chiediamo all'utente quale file caricare
+        // Chiediamo all'utente quale file caricare
         System.out.println("Training set: ");
         String fileName = Keyboard.readString();
         
@@ -26,7 +26,7 @@ class MainTest {
             tree.printRules();
             tree.printTree();
             
-            // 2. FASE DI PREDIZIONE (Ciclo interattivo)
+            //FASE DI PREDIZIONE (Ciclo interattivo)
             char repeat = 'y';
             do {
                 System.out.println("Starting prediction phase!");
