@@ -1,136 +1,154 @@
-/* 
- * La classe RegressionTree rappresenta un albero di regressione.
- */
 package tree;
+
 import data.*;
 import utility.Keyboard;
+import java.io.*;
+import java.util.TreeSet;
 
-public class RegressionTree {
-		
+public class RegressionTree implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private Node root;
     private RegressionTree childTree[];
 
-    // Costruttore vuoto per l'uso ricorsivo.
-    RegressionTree() {}
+    public RegressionTree() {}
 
-    // Costruisce l'albero a partire dal training set.
     public RegressionTree(Data trainingSet) {
-        // Calcola il 10% 
         int minExamples = trainingSet.getNumberOfExamples() * 10 / 100;
         learnTree(trainingSet, 0, trainingSet.getNumberOfExamples() - 1, minExamples);
     }
 
-    // Determina se l'intervallo deve essere una foglia.
     private boolean isLeaf(Data trainingSet, int begin, int end, int numberOfExamplesPerLeaf) {
-        // Ritorna true se il numero di esempi è sotto la soglia
         return (end - begin + 1) <= numberOfExamplesPerLeaf;
     }
 
-    // Cerca il miglior split tra gli attributi discreti.
+    /**
+     * Ridefinito con l'uso di RTTI per gestire dinamicamente nodi discreti e continui
+     */
     private SplitNode determineBestSplitNode(Data trainingSet, int begin, int end) {
-        SplitNode bestNode = null;
-        double minVariance = Double.MAX_VALUE;
+        TreeSet<SplitNode> ts = new TreeSet<SplitNode>();
         double initialVariance = trainingSet.getVariance(begin, end);
 
         for (int i = 0; i < trainingSet.getNumberOfExplanatoryAttributes(); i++) {
             Attribute attr = trainingSet.getExplanatoryAttribute(i);
+            SplitNode currentNode = null;
+
+            // Uso dell'RTTI per discriminare il tipo di attributo
             if (attr instanceof DiscreteAttribute) {
-                DiscreteNode currentNode = new DiscreteNode(trainingSet, begin, end, (DiscreteAttribute) attr);
-                //Lo split è migliore solo se la varianza calcolata è STRETTAMENTE MINORE
-                if (currentNode.getVariance() < minVariance && currentNode.getVariance() < initialVariance) {
-                    minVariance = currentNode.getVariance();
-                    bestNode = currentNode;
-                }
+                currentNode = new DiscreteNode(trainingSet, begin, end, (DiscreteAttribute) attr);
+            } else if (attr instanceof ContinuousAttribute) {
+                currentNode = new ContinuousNode(trainingSet, begin, end, (ContinuousAttribute) attr);
+            }
+
+            if (currentNode != null && currentNode.getVariance() < initialVariance) {
+                ts.add(currentNode);
             }
         }
-        return bestNode;
-    }
-    
-    // Stampa le regole dell'albero.
-    public void printRules() {
-        System.out.println("********* RULES **********");
-        printRules("");
+
+        if (!ts.isEmpty()) {
+            return ts.first();
+        }
+        return null;
     }
 
-    // Stampa le regole ricorsivamente per ogni ramo.
-    private void printRules(String current) {
-        if (root instanceof LeafNode) {
-            System.out.println(current + " ==> Class=" + ((LeafNode) root).getPredictedClassValue());
-        } else {
-                for (int i = 0; i < childTree.length; i++) {
-                    if (childTree[i] != null) {
-                        SplitNode sn = (SplitNode) root;
-                        String rule = current + (current.isEmpty() ? "" : " AND ") + 
-                        sn.getAttribute().getName() + "=" + sn.getSplitInfo(i).getSplitValue();
-                        childTree[i].printRules(rule);
-                    }
-                }
-            }
-    }
-    
-    // Costruisce ricorsivamente l'albero di regressione.
     public void learnTree(Data trainingSet, int begin, int end, int numberOfExamplesPerLeaf) {
         if (isLeaf(trainingSet, begin, end, numberOfExamplesPerLeaf)) {
             root = new LeafNode(trainingSet, begin, end);
         } else {
             root = determineBestSplitNode(trainingSet, begin, end);
 
-            // Se lo split esiste e ha effettivamente diviso i dati in rami diversi
             if (root != null && root.getNumberOfChildren() > 1) {
                 childTree = new RegressionTree[root.getNumberOfChildren()];
                 for (int i = 0; i < root.getNumberOfChildren(); i++) {
                     SplitNode sn = (SplitNode) root;
-                        if (sn.getSplitInfo(i) != null) {
-                            childTree[i] = new RegressionTree();
-                            childTree[i].learnTree(trainingSet, sn.getSplitInfo(i).beginIndex, sn.getSplitInfo(i).endIndex, numberOfExamplesPerLeaf);
+                    if (sn.getSplitInfo(i) != null) {
+                        childTree[i] = new RegressionTree();
+                        childTree[i].learnTree(trainingSet, sn.getSplitInfo(i).beginIndex, sn.getSplitInfo(i).endIndex, numberOfExamplesPerLeaf);
                     }
                 }
             } else {
-                // Se lo split non è utile, creiamo una foglia con la media dei valori
                 root = new LeafNode(trainingSet, begin, end);
-                }
+            }
         }
-}
+    }
 
-		
-    // Stampa la struttura dell'albero.
-    public void printTree(){
-		System.out.println("********* TREE **********\n");
-		System.out.println(toString());
-		System.out.println("*************************\n");
-	}
-		
-	public String toString(){
-		String tree=root.toString()+"\n";
-		if( root instanceof LeafNode){
+    public void printRules() {
+        System.out.println("********* RULES **********");
+        printRules("");
+    }
 
-			}
-			else {     //split node
-				for(int i=0;i<childTree.length;i++){
-                    if (childTree[i] != null)
-					tree +=childTree[i];
+    private void printRules(String current) {
+        if (root instanceof LeafNode) {
+            System.out.println(current + " ==> Class=" + ((LeafNode) root).getPredictedClassValue());
+        } else if (root instanceof SplitNode) {
+            SplitNode sn = (SplitNode) root;
+            for (int i = 0; i < childTree.length; i++) {
+                if (childTree[i] != null) {
+                    String rule = current + (current.isEmpty() ? "" : " AND ") +
+                            sn.getAttribute().getName() + sn.getSplitInfo(i).getComparator() + sn.getSplitInfo(i).getSplitValue();
+                    childTree[i].printRules(rule);
                 }
-			}
-		return tree;
-	}
-    // Predice la classe leggendo i valori dell'utente.
+            }
+        }
+    }
+
+    /**
+     * Gestione interattiva della predizione con controllo rigido e pulito dell'input intero.
+     */
     public Double predictClass() throws UnknownValueException {
         if (root instanceof LeafNode) {
             return ((LeafNode) root).getPredictedClassValue();
         } else {
-                int risp;
-                System.out.println(((SplitNode) root).formulateQuery());
-                risp = Keyboard.readInt(); 
+            int risp = -1;
+            int nChildren = root.getNumberOfChildren();
+            boolean validInput = false;
 
-                // Usa getNumberOfChildren() che ora conta solo i rami non nulli
-                int nChildren = root.getNumberOfChildren();
-        
-                if (risp < 0 || risp >= nChildren) {
-                    throw new UnknownValueException("The answer should be an integer between 0 and " + (nChildren - 1) + "!");
+            // Disattiviamo gli errori interni di Keyboard per pulire la console
+            utility.Keyboard.setPrintErrors(false);
+
+            while (!validInput) {
+                System.out.println(((SplitNode) root).formulateQuery());
+                risp = Keyboard.readInt();
+
+                // Se l'utente digita un numero con la virgola (es 10.0), Keyboard restituisce Integer.MIN_VALUE
+                if (risp >= 0 && risp < nChildren) {
+                    validInput = true;
                 } else {
-                    return childTree[risp].predictClass();
+                    System.out.println("Errore di input! Devi inserire obbligatoriamente un numero intero compreso tra 0 e " + (nChildren - 1) + ".\n");
                 }
             }
+
+            return childTree[risp].predictClass();
+        }
+    }
+
+    /**
+     * Serializza l'albero corrente in un file.
+     */
+    public void salva(String nomeFile) throws FileNotFoundException, IOException {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(nomeFile));
+        out.writeObject(this);
+        out.close();
+    }
+
+    /**
+     * Carica un albero di regressione precedentemente salvato.
+     */
+    public static RegressionTree carica(String nomeFile) throws FileNotFoundException, IOException, ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(nomeFile));
+        RegressionTree tree = (RegressionTree) in.readObject();
+        in.close();
+        return tree;
+    }
+
+    public String toString() {
+        String tree = root.toString() + "\n";
+        if (!(root instanceof LeafNode) && childTree != null) {
+            for (int i = 0; i < childTree.length; i++) {
+                if (childTree[i] != null)
+                    tree += childTree[i];
+            }
+        }
+        return tree;
     }
 }
-		
