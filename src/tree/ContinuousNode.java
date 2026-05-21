@@ -42,14 +42,19 @@ public class ContinuousNode extends SplitNode {
                 currentSplitValue = value;
             }
         }
-        mapSplit = bestMapSplit;
 
-        // Rimuovo split inutili
-        if (mapSplit != null && mapSplit.size() > 1) {
-            if ((mapSplit.get(1).beginIndex == mapSplit.get(1).getEndIndex())) {
-                mapSplit.remove(1);
+        if (bestMapSplit != null) {
+            mapSplit = bestMapSplit;
+            
+            // Rimuovo split inutili se il ramo destro è vuoto o fittizio
+            if (mapSplit.size() > 1) {
+                if (mapSplit.get(1).beginIndex > mapSplit.get(1).getEndIndex()) {
+                    mapSplit.remove(1);
+                }
             }
         }
+        // Se bestMapSplit è rimasto null, mapSplit rimarrà l'ArrayList vuoto 
+        // inizializzato nel costruttore di SplitNode, evitando la NullPointerException.
     }
 
     /**
