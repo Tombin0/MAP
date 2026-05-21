@@ -5,7 +5,7 @@
 
 	package data;
 	
-	public abstract class Attribute {
+	public abstract class Attribute implements java.io.Serializable {
     	protected String name; 
     	protected int index;  
 

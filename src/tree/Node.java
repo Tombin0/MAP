@@ -5,7 +5,7 @@
 package tree;
 import data.*;
 
-public abstract class Node {
+public abstract class Node implements java.io.Serializable {
     static int idNodeCount = 0;
     int idNode;
     int beginExampleIndex;
