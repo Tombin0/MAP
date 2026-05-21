@@ -16,6 +16,7 @@ public class Data {
     private List<Attribute> explanatorySet;
     private ContinuousAttribute classAttribute;
 
+    // Legge e inizializza il dataset dal file.
     public Data(String fileName) throws TrainingDataException {
         File inFile = new File(fileName);
         Scanner sc;
@@ -80,14 +81,17 @@ public class Data {
         sc.close();
     }
 
+    // Restituisce l'attributo target.
     public ContinuousAttribute getClassAttribute() {
         return classAttribute;
     }
 
+    // Restituisce il valore di classe di un esempio.
     public Double getClassValue(int exampleIndex) {
         return (Double) data[exampleIndex][explanatorySet.size()];
     }
 
+    // Restituisce il dataset come stringa CSV.
     public String toString() {
         String value = "";
         for (int i = 0; i < numberOfExamples; i++) {
@@ -98,10 +102,12 @@ public class Data {
         return value;
     }
 
+    // Ordina il dataset in base a un attributo.
     public void sort(Attribute attribute, int beginExampleIndex, int endExampleIndex) {
         quicksort(attribute, beginExampleIndex, endExampleIndex);
     }
 
+    // Esegue il quicksort sul sottoinsieme specificato.
     private void quicksort(Attribute attribute, int inf, int sup) {
         if (sup >= inf) {
             int pos;
@@ -116,6 +122,7 @@ public class Data {
         }
     }
 
+    // Scambia due righe del dataset.
     private void swap(int i, int j) {
         Object temp;
         for (int k = 0; k <= getNumberOfExplanatoryAttributes(); k++) {
@@ -125,22 +132,27 @@ public class Data {
         }
     }
 
+    // Ottiene il valore di un attributo esplicativo.
     public Object getExplanatoryValue(int exampleIndex, int attributeIndex) {
         return data[exampleIndex][attributeIndex];
     }
 
+    // Restituisce l'attributo esplicativo alla posizione specificata.
     public Attribute getExplanatoryAttribute(int index) {
         return explanatorySet.get(index);
     }
 
+    // Restituisce il numero di attributi esplicativi.
     public int getNumberOfExplanatoryAttributes() {
         return explanatorySet.size();
     }
 
+    // Restituisce il numero di esempi disponibili.
     public int getNumberOfExamples() {
         return numberOfExamples;
     }
 
+    // Partiziona il sottoinsieme per quicksort usando il valore mediano.
     private int partition(DiscreteAttribute attribute, int inf, int sup) {
         int i = inf;
         int j = sup;
@@ -164,6 +176,7 @@ public class Data {
         return j;
     }
 
+    // Calcola la varianza dei valori di classe nel sottoinsieme.
     public double getVariance(int beginExampleIndex, int endExampleIndex) {
         double sum = 0;
         for (int i = beginExampleIndex; i <= endExampleIndex; i++) {

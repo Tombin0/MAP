@@ -3,11 +3,13 @@ package tree;
 import data.*;
 
 public class DiscreteNode extends SplitNode {
+    // Costruisce un nodo discreto basato su un attributo discreto.
     public DiscreteNode(Data trainingSet, int beginExampleIndex, int endExampleIndex, DiscreteAttribute attribute) {
         super(trainingSet, beginExampleIndex, endExampleIndex, attribute);
     }
 
     @Override
+    // Imposta i rami per ciascun valore discreto dell'attributo.
     void setSplitInfo(Data trainingSet, int beginExampleIndex, int endExampleIndex, Attribute attribute) {
         DiscreteAttribute discreteAttribute = (DiscreteAttribute) attribute;
         int childCount = 0;
@@ -33,6 +35,7 @@ public class DiscreteNode extends SplitNode {
     }
 
     @Override
+    // Individua l'indice del ramo corrispondente al valore fornito.
     int testCondition(Object value) {
         for (int i = 0; i < mapSplit.size(); i++) {
             if (mapSplit.get(i) != null && mapSplit.get(i).getSplitValue().equals(value)) {

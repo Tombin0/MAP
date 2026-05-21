@@ -5,6 +5,7 @@
 package tree;
 
 public class UnknownValueException extends Exception {
+    // Crea l'eccezione per valori sconosciuti.
     public UnknownValueException(String message) {
         super(message);
     }

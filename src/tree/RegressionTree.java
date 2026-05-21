@@ -10,19 +10,23 @@ public class RegressionTree {
     private Node root;
     private RegressionTree childTree[];
 
+    // Costruttore vuoto per l'uso ricorsivo.
     RegressionTree() {}
 
+    // Costruisce l'albero a partire dal training set.
     public RegressionTree(Data trainingSet) {
         // Calcola il 10% 
         int minExamples = trainingSet.getNumberOfExamples() * 10 / 100;
         learnTree(trainingSet, 0, trainingSet.getNumberOfExamples() - 1, minExamples);
     }
 
+    // Determina se l'intervallo deve essere una foglia.
     private boolean isLeaf(Data trainingSet, int begin, int end, int numberOfExamplesPerLeaf) {
         // Ritorna true se il numero di esempi è sotto la soglia
         return (end - begin + 1) <= numberOfExamplesPerLeaf;
     }
 
+    // Cerca il miglior split tra gli attributi discreti.
     private SplitNode determineBestSplitNode(Data trainingSet, int begin, int end) {
         SplitNode bestNode = null;
         double minVariance = Double.MAX_VALUE;
@@ -42,10 +46,13 @@ public class RegressionTree {
         return bestNode;
     }
     
+    // Stampa le regole dell'albero.
     public void printRules() {
         System.out.println("********* RULES **********");
         printRules("");
     }
+
+    // Stampa le regole ricorsivamente per ogni ramo.
     private void printRules(String current) {
         if (root instanceof LeafNode) {
             System.out.println(current + " ==> Class=" + ((LeafNode) root).getPredictedClassValue());
@@ -61,6 +68,7 @@ public class RegressionTree {
             }
     }
     
+    // Costruisce ricorsivamente l'albero di regressione.
     public void learnTree(Data trainingSet, int begin, int end, int numberOfExamplesPerLeaf) {
         if (isLeaf(trainingSet, begin, end, numberOfExamplesPerLeaf)) {
             root = new LeafNode(trainingSet, begin, end);
@@ -85,6 +93,7 @@ public class RegressionTree {
 }
 
 		
+    // Stampa la struttura dell'albero.
     public void printTree(){
 		System.out.println("********* TREE **********\n");
 		System.out.println(toString());
@@ -104,6 +113,7 @@ public class RegressionTree {
 			}
 		return tree;
 	}
+    // Predice la classe leggendo i valori dell'utente.
     public Double predictClass() throws UnknownValueException {
         if (root instanceof LeafNode) {
             return ((LeafNode) root).getPredictedClassValue();
