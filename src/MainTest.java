@@ -22,8 +22,8 @@ public class MainTest {
 		} while (!(decision == 1) && !(decision == 2));
 		
 		String trainingfileName = "";
-		// 1. CAMBIATO: Richiesta esplicita del file con estensione
-		System.out.println("File name (con estensione):");
+		// 1. CAMBIATO: mostra il training set invece del prompt file
+		System.out.println("Training set:");
 		trainingfileName = Keyboard.readString();
 		
 		RegressionTree tree = null;
