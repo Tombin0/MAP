@@ -30,6 +30,7 @@ public class RegressionTree implements Serializable {
             Attribute attr = trainingSet.getExplanatoryAttribute(i);
             SplitNode currentNode = null;
 
+            // RTTI per discriminare dinamicamente il corretto tipo di nodo (Specifica Pagina 1)
             if (attr instanceof DiscreteAttribute) {
                 currentNode = new DiscreteNode(trainingSet, begin, end, (DiscreteAttribute) attr);
             } else if (attr instanceof ContinuousAttribute) {
@@ -79,7 +80,7 @@ public class RegressionTree implements Serializable {
         } else if (root instanceof SplitNode) {
             SplitNode sn = (SplitNode) root;
             for (int i = 0; i < childTree.length; i++) {
-                if (childTree[i] != null) {
+                if (childTree[i] != null && sn.getSplitInfo(i) != null) {
                     String rule = current + (current.isEmpty() ? "" : " AND ") +
                             sn.getAttribute().getName() + sn.getSplitInfo(i).getComparator() + sn.getSplitInfo(i).getSplitValue();
                     childTree[i].printRules(rule);
@@ -99,7 +100,6 @@ public class RegressionTree implements Serializable {
         String tree = root.toString() + "\n";
         if (!(root instanceof LeafNode) && childTree != null) {
             for (int i = 0; i < childTree.length; i++) {
-                // CORREZIONE CRITICA: Protezione anti-NullPointerException
                 if (childTree[i] != null) {
                     tree += childTree[i].toString();
                 }
