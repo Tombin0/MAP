@@ -1,0 +1,19 @@
+DIZIONARIO
+
+sorts dizionario, chiave, valore
+-creadizionario()->dizionario
+-aggiungicoppia(dizionario, coppia valore)->dizionario
+-cancella(dizionario, valore)->dizionario
+	declare d,d':dizionario k:chiave v,v':valore
+	cancella(d',h)
+	cancella(creadizionario(), (d', v'))=error 
+	cancella(aggiungi(d,k,v),v')= 
+		if v=v' then
+			if appartiene(d,v')then cancella(d,v')
+			else d
+		else
+		aggiungi(cancella(d,v')k,v) //D=(1,a),(2,b),(3,a),(4,c)    k,v= (5,b)
+
+-appartiene(dizionario, valore)-->boolean
+	appartiene(crea, v')=false
+	appartiene(aggiungi(d,k,v), v') = if v=v' then true else appartiene(d, v')

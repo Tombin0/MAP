@@ -1,0 +1,43 @@
+Fornire l’insieme completo e minimale delle specifiche algebriche (semantiche e di restrizione) del tipo astratto Matrice di cui si forniscono le specifiche sintattiche.
+ 
+Sort: Matrice, Intero, Booleano, Reale
+ 
+-creaMatrice(Intero)-->Matrice // crea una matrice quadrata di reali (inizialmente pari a zero), la dimensione della matrice è specificata come parametro
+
+-assegna(Matrice, Intero, Intero, Reale)-->Matrice // assegna in valore specificato (quarto parametro) alla posizione della matrice (primo parametro) con indice di riga e colonna specificati come secondo e terzo parametro, rispettivamente
+
+-leggi(Matrice, Intero, Intero)-->Reale // legge il valore nella posizione della matrice con indice di riga e colonna specificati come secondo e terzo parametro, rispettivamente
+	declare:M1:Matrice;c1,c2:colonna,r1,r2:riga;;v1,v2:valore
+	-leggi(crea)=error
+	-leggi(assegna(M,r1,c1,v1),r2,c2)=if c1=c2 and r1=r2 then v1 else assegna(M,r1,c1,v1),r2,c2)
+
+-max(Matrice)-->Reale  // restituisce il valore massimo attualmente memorizzato nella matrice
+	declare:M1:Matrice;c1,c2:colonna,r1,r2:riga;v1,v2:valore;
+	max(crea)=error
+	max(assegna(M,r,c,v)=if vuoto(M) than v else
+	if v>max(M) then v else max(M)
+	
+
+-vuoto(Matrice)-->boolean //verifica se ci sono valori nella matrice
+	vuoto(crea)=true
+	vuoto(assegna(M,r,c,v))=false
+
+
+-somma(Matrice, Matrice)-->Matrice // restituisce la matrice computata tramite somma, solleva errore se le due matrici non hanno uguale dimensione
+	declare:M1,M2,M3:Matrice;c1,c2:colonna,r1,r2:riga;v1,v2:valore;
+	somma(crea(M1),crea(M2))=error
+	assunzioni:
+	and:boolean,boolean-->boolean
+	+: intero+intero-->intero
+
+
+-uguale(Matrice, Matrice)-->Booleano // vero se le due matrici contengono uguali valori nelle medesimi posizioni, falso altrimenti (solleva errore se le due matrici non hanno uguale dimensione)
+	declare:M1,M2:Matrice;c1,c2:colonna,r1,r2:riga;v1,v2:valore;
+	uguale(crea(m1),crea(m2))=error
+	uguale(vuota(m1),vuota(m2))=true
+	uguale(assegna(M1,c1,r1,v1),Assegna(m2,c2,r2,v2))=if c1=c2 and r1=r2 and v1=v2 than true else error
+	
+	assunzioni:
+	and: boolean,boolean-->boolean
+
+

@@ -1,0 +1,11 @@
+PSW Elearning: map2526
+PSW Teams: qusa8sp
+
+
+ESAME SCRITTO:
+Specifiche algebriche
+Astrazione della programmazione (Object based)
+Paradigma objet oriented (UML) + java
+
+PROGETTO:
+

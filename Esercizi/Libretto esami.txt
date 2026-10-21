@@ -1,0 +1,59 @@
+Libretto
+
+-crea()--> Libretto() //crea un libretto vuoto
+
+-inserisci(libretto,Esame,Voto) --> Libretto //registra la coppia esame-voto sul libretto
+
+-vuoto(Libretto)--> Boolean //verifica che il libretto sia vuoto
+	declare: L:Libretto,e1:Esame,v:voto //dichiarazione variabili 
+	vuoto(crea())=true //verifica se il libretto è realmente vuoto 
+	vuoto(inserisci(L,e1,v))=false //verifica se il libretto è realmente vuoto 
+
+- contieneEsame(Libretto,Esame)-->boolean //verifica se Esame è registrato si Libretto
+	declare: L:Libretto,e1,e2:Esame,v:voto //dichiarazione variabili  con "e1" e "e2'" sono due esami diversi  
+	contiene(Crea,e')= false
+	contiene(inserisci(L,e1,v),e2)= if e1=e2 then true else contiene(L,e2) //ricorsione che controlla se esistono gli esami all'interno del libretto  
+
+- leggiVoto(Libretto,Esame)-->Voto //restituisce il voto di Esame se è registrato si Libretto
+	declare L:Libretto,e1,e2:Esame,v:Voto
+	leggivoto(crea,e2)=error //poiche il voto dell'esame non c'è da errore
+	leggiVoto(inserisci(L,e1,v),e2)=if e1=e2 then v else leggiVoto(L,e2) //controllo se ci sono voti nel libretto dove a dx il piu grande e sx il piu piccolo 
+
+-contaEsami(Libretto)-->Intero //restituisce il numero di esami registrati nel libretto
+	declare L:Libretto,e1:Esame,v:Voto
+	contaEsami(crea)=0 // esami non ci sono quindi 
+	contaEsami(inserisci(L,v,e))=1+contaEsami(L) // conta gli esami dentro il libretto aggiunge +1 per il numero di esami nel libretto
+		assumiamo +(Intero,Intero)-->intero //dichiara che la somma per contare gli esami è da due interi dando come risultato intero
+
+-mediaVoti(Libretto)-->Intero //registra la media dei voti
+	declare L:Libretto,e1:Esame,v:Voto
+ 	media(crea)=error //la media è "error" perché su un libretto vuoto non ci sono voti ed impossibile calcolarla
+	// VERSIONE 1 PER CALCOLARE LA MEDIA
+	media(inserisci(L,e,v))=if vuoto(L) then v else media(L)*contaEsami(L)+v / contaEsami(L)+1
+		//dichiaro le operazioni per l'equazione in "media(inserisci…)"
+		assumiamo + (Voto+Voto)-->Voto
+		assumiamo + (Intero,Intero)--Intero 
+		assumiamo \ (Voto,Intero)-->Voto
+		assumiamo * (Voto,Intero)-->Voto
+	// VERSIONE 2 PER CALCOLARE LA MEDIA
+	declare L:Libretto,e1:Esame,v:Voto
+	sommaVoti(Libretto)-->Voto
+	sommaVoti(crea)= error 
+	sommmaVoti(inserisci(L,e,v)= if vuoto(L) then v else v+sommaVoti(L)
+		assumiamo + (Voto+Voto)--> Voto
+	media(inserisci(L,e,v))= sommaVoti(inserisci(L,e,v)) \ contaEsami(inserisci(L,e,v)) // il controllo è stato gia fatto e non c'è ricorsione
+ 		assunzioni : (Voto,Intero)-->Voto 
+		
+-contaVoti(Libretto,Voto)--> Intero // conta il numero di esami registrati nel libretto con voto = Voto
+	declare L:Libretto,e1:Esame,v1,v2:Voto
+	contaVoti(crea,v1)=0 //il conteggio è 0 piochè il libretto è vuoto
+	contaVoti(inserisci(L,e,v1),v2)= if v1=v2 then 1+contaVoti(L,v2) else contaVoti(L,v2)
+		assumiamo +:(intero,intero)-->Intero
+
+stessoVoto(Libretto1,Libretto,Esame)-->bolean //restituisce true se nei 2 libretti è registrato esame con lo stesso voto
+	declare L1,L2:Libretto,e1,e2,e3:Esame,v1,v2:Voto //sono 3 esami poichè c'e E1 in L1, E2 in L2, E3 per controllo 
+	stessoVoto(crea,crea,e3)= error // errore perchè l'esame "e3"  nei 2 libretti non ce 
+	stessoVoto(crea,inserisci(L2,e2,v2),e3)=error // error perche l2 è vuoto e l1 pieno 
+	stessoVoto(inserisci(L1,e1,v1),crea,e3)=error //error perche l1 è vuoto e l2 pieno
+	stessoVoto(inserisci(L1,e1,v1),inserisci(l2,e2,v2),e3)=leggiVoto(inserisci(l1,e1,v1),e3)=leggivoto(inserisci(l2,e2,v2),e3) //controlla se all'interno dei 2 libretti è presente il voto dell'esame da controllare
+

@@ -1,0 +1,42 @@
+Fornire l’insieme completo e minimale delle specifiche algebriche (semantiche e di restrizione) del tipo astratto Albero di cui si forniscono le seguenti specifiche sintattiche:
+
+Tipi: Albero, Nodo, Intero, Boolean
+
+Operatori:
+-crea() Albero //crea un albero binario vuoto
+
+-aggiungiR(Albero, Nodo)Albero // aggiunge la radice all’albero
+
+-aggiungiS(Albero, Nodo, Nodo)Albero // aggiunge il secondo nodo come figlio sinistro del primo nodo nell’albero
+
+-aggiungiD(Albero, Nodo, Nodo)Albero // aggiunge il secondo nodo come figlio destro del primo nodo nell’albero
+
+-vuoto(Albero)-->boolean //verifica se l'albero è vuoto
+	declare:  A:Albero,n:nodo
+	vuoto(crea)=true
+	vuoto(aggiungiR(A,n)=false
+	vuoto(aggiungiS(A,n))=false
+	vuoto(aggiungiD(A,n))=false
+
+-conta(Albero)  Intero // conta il numero di nodi nell’albero
+	declare:  A:Albero;n1:nodo
+	conta(crea)=0
+	conta(aggiungiR(a,n1))=1
+	conta(aggiungiS(a,n1))=1+conta(A)
+	conta(aggiungiD(a,n1))=1+conta(A)
+
+-max(Albero)  Intero // restituisce  la profondità massima dell’albero
+	declare:  A:Albero;n1:nodo
+	max(crea)=0
+	max(aggiungiR(a,n1))=1x
+	max(A)=if conta(AggiungiS(A,n1)) > conta(aggiungiD(A,n1)) than max(A) else conta(AggiungiD(A,n1)) > conta(aggiungiS(A,n1)) than conta(AggiungiD(A,n1))
+
+-pota(Albero, Nodo)  Albero // cancella il sottoalbero radicato nel nodo trasformandolo in foglia; solleva errore se il nodo è assente
+
+
+-Equal(Albero, Albero)  Boolean // restituisce  vero se i due alberi hanno uguale profondità massima, falso altrimenti
+	declare:  A1,A2:Albero;n1:nodo
+	equal(crea(A1),crea(A2))= true
+	equal(crea(A1),max(A2))= false
+	equal(max(A2),crea(A2))= false
+	equal(max(A1),max(A2))= if max(A1)=max(A2) than true else false

@@ -1,0 +1,31 @@
+equal(newstack, newstack)=true
+equal(push(stk,i),newstack)=false
+equal(newstack,push(stk,i))=false
+equal(push(stk,i),push(stk',i'))=
+i=i' and stk=stk'
+
+assunzioni:
+and: Boolean x Boolean--> Boolean
+
+equal(newstack, m)=isnew(m)
+equal(push(stk, i), m)=not is new(m) and i=top(m) and equal(stk, pop(m))
+append(add(s, c))= add(s,c)
+append(add(s,c),add(s',c'))= add(append(add(s,c),s'),c')
+
+declare m,s:string c:char
+
+append(m, new)= m 
+append(m, add(s,c))=add(append(m,s), c)
+
+equal(m, new)= isempty(m)
+equal(m, add(s,c))=
+if isempty(m) then false 
+else top(m)=c and equal(pop(m),s)
+
+top: String-->Char
+top(new)=error
+top(add(s,c))=c
+
+pop(new)=error
+top(add(s,c))=c
+

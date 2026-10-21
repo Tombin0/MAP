@@ -1,0 +1,18 @@
+ESERCIZIO CONTO CON FIDO (conto corrente)
+
+sorts contocorrente, saldo, denaro, scoperto
+
+-conto(saldo, scoperto)-->contocorrente
+
+-saldo(contocorrente)-->saldo
+	declare s:saldo l:scoperto
+	saldo(conto(s,l))=s
+-deposita(contocorrente, denaro)-->contocorrente
+	deposita(c,d)=conto(s+d,l)
+-preleva(contocorrente, denaro)-->contocorrente
+	preleva(c,d)=if s-d<-l then error else conto(s-d,l)
+	preleva(deposita(conto(s,l),d,d)=preleva(conto(s+d),d)= conto(s,l)
+-concediFido(contoCorrente, scoperto)-->contocorrente
+	concedifido(c, l')= if s<-l' then error else conto(s,l')
+-fidoconcesso(contocorrente)-->scoperto
+	fidoconcesso(c)=l

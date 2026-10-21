@@ -1,0 +1,46 @@
+SOCIALBOOK
+
+TIPI: SocialBook,Contatto,Intero,Boolean
+OPERATORI:
+
+declare s1:SocialBook,c1,c2,c3,c4:Contatti,l:Legami
+
+-crea()-->SocialBook //crea SB(SocialBook) vuoto
+
+-aggiungiContatto(SocialBook,Contatto)-->SocialBook// aggiunge il C(contatto) a SB
+
+-aggiungiLegame(SocialBook,Contatto1,Contatto2)-->SocialBook //crea legami fra due contatti nel SB
+
+-vuoto(SocialBook)-->boolean // verifica se SB sia privo di C
+	vuoto(crea)=true
+	vuoto(AggiungiContatto(S,c1))=false
+	vuoto(Aggiungilegame(S,c1,c2)=false
+
+-contieneContatto(SocialBook,contatto)--boolean //verifica che C appartenga a SB 
+	contieneContatto(crea,c2)=false
+	contieneContatto(aggiungiContatto(s,c1),c2)=if c1=c2 then true else contieneContatto(s,e2)
+	contieneContatto(aggiungiLegame(S,c1,c2),c2)=contieneContatto(S,c2)
+
+-contieneLegame(SocialBook,Contatto,Contatto)-->boolean // verifica se esiste un legame(L) tra 2 C del SB
+	contieneLegame(crea,c2,c3)=error //essendo vuoto SB non ci sono L
+	contieneLegame(aggiungiContatto(S,c1),c2,c3)=
+		if contieneContatto(aggiungiContatto(S,c1)c2) and contieneContatto(aggiungiContatto(S,c1)c3) then //verifica se sono presenti i contatti dentro SB
+			if c1=C2 or c1=C3 then false //se i 2 contatti sono uguali non ci sono C  
+			else contieneLegame(S,c2,c3) //da come risultato se vero o falso
+		else error //se non ci sono da errore
+	contieneLegame(aggiungiLegame(S,c1,c2)c3,c4)=
+		if(c1=c3 and c2=c4) or( c1=c4 and c2=c3) then true 
+		else contieneLegame(S,c2,c3)
+
+	assunzioni:
+	and:boolean,boolean--> boolean
+	or:boolean,boolean-->boolean
+	+: intero,intero-->intero
+
+-contaLegami(socialBook,contatto)..>intero // conta L di un singolo C nel SB
+	contaLegami(crea,c2)=error
+	contaLegami(aggiungiCOntatto(S,c1),c2)=if c1=c2 then 0 else contaLEgami(S,c2)
+	contaLegami(aggiungiLegame(S,c1,c2)c3=
+		if c1=c3 or c2=c3 then 1+contaLEgami(S,c3)
+		else contaLegami(S,c3)
+
